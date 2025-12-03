@@ -11,7 +11,7 @@ class Model:
         for r in self._list_rifugi:
             self._dict_rifugi[r.id] = r
 
-        self.G = nx.Graph()
+        self.G = None
 
     def build_graph(self, year: int):
         """
@@ -20,6 +20,7 @@ class Model:
         Quindi il grafo avrà solo i nodi che appartengono almeno ad una connessione, non tutti quelli disponibili.
         :param year: anno limite fino al quale selezionare le connessioni da includere.
         """
+        self.G = nx.Graph()
 
         connessioni = DAO.readAllConnessioni(self._dict_rifugi, year)
 
@@ -38,7 +39,7 @@ class Model:
         Restituisce la lista dei rifugi presenti nel grafo.
         :return: lista dei rifugi presenti nel grafo.
         """
-        # TODO
+        return self.G.nodes()
 
     def get_num_neighbors(self, node):
         """
@@ -46,14 +47,16 @@ class Model:
         :param node: un rifugio (cioè un nodo del grafo)
         :return: numero di vicini diretti del nodo indicato
         """
-        # TODO
+        num_meighbors = len(list(self.G.neighbors(node)))
+        return num_meighbors
 
     def get_num_connected_components(self):
         """
         Restituisce il numero di componenti connesse del grafo.
         :return: numero di componenti connesse
         """
-        # TODO
+        num = len(list(nx.connected_components(self.G)))
+        return num
 
     def get_reachable(self, start):
         """
@@ -72,4 +75,14 @@ class Model:
         return a
         """
 
-        # TODO
+        result_bfs = self.get_reachable_bfs_tree(start)
+
+        return result_bfs
+
+
+    def get_reachable_bfs_tree(self, start):
+        bfs_tree = nx.bfs_tree(self.G, start)
+        list_visited = list(bfs_tree.nodes())
+        list_visited.remove(start)
+
+        return list_visited

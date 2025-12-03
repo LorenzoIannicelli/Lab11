@@ -11,7 +11,7 @@ class Rifugio:
     aperto : int
 
     def __str__(self):
-        return f'{self.nome} ({self.localita})'
+        return f'[{self.id}] {self.nome} ({self.localita})'
 
     def __hash__(self):
         return hash(self.id)
