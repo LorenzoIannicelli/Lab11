@@ -4,6 +4,13 @@ from database.dao import DAO
 
 class Model:
     def __init__(self):
+        self._list_rifugi = []
+        self.get_all_rifugi()
+
+        self._dict_rifugi = {}
+        for r in self._list_rifugi:
+            self._dict_rifugi[r.id] = r
+
         self.G = nx.Graph()
 
     def build_graph(self, year: int):
@@ -13,7 +20,18 @@ class Model:
         Quindi il grafo avrà solo i nodi che appartengono almeno ad una connessione, non tutti quelli disponibili.
         :param year: anno limite fino al quale selezionare le connessioni da includere.
         """
-        # TODO
+
+        connessioni = DAO.readAllConnessioni(self._dict_rifugi, year)
+
+        for c in connessioni:
+            self.G.add_node(c.r1)
+            self.G.add_node(c.r2)
+            self.G.add_edge(c.r1, c.r2)
+
+        #print(self.G)
+
+    def get_all_rifugi(self):
+        self._list_rifugi = DAO.readAllRifugi()
 
     def get_nodes(self):
         """
