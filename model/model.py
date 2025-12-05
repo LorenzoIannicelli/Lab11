@@ -1,4 +1,6 @@
 import networkx as nx
+from networkx.classes import neighbors
+
 from database.dao import DAO
 
 
@@ -76,8 +78,9 @@ class Model:
         """
 
         result_bfs = self.get_reachable_bfs_tree(start)
+        #result_recursive_dfs = self.get_reacheable_recursive_dfs(start, set())
 
-        return result_bfs
+        return result_bfs#, result_recursive_dfs
 
 
     def get_reachable_bfs_tree(self, start):
@@ -86,3 +89,12 @@ class Model:
         list_visited.remove(start)
 
         return list_visited
+
+    def get_reacheable_recursive_dfs(self, start, visited):
+
+        for v in neighbors(self.G, start):
+            if v not in visited:
+                visited.add(v)
+                self.get_reacheable_recursive_dfs(v, visited)
+
+        return visited
