@@ -79,8 +79,9 @@ class Model:
 
         result_bfs = self.get_reachable_bfs_tree(start)
         #result_recursive_dfs = self.get_reacheable_recursive_dfs(start, set())
+        #result_recursive_dfs.remove(start)
 
-        return result_bfs#, result_recursive_dfs
+        return result_bfs
 
 
     def get_reachable_bfs_tree(self, start):
